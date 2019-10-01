@@ -27,25 +27,6 @@ public class ProductViewController {
 	
 	@Autowired
 	private RestTemplateBuilder restTemplateBuilder;
-	
-	
-	@RequestMapping("/getAllProducts")
-	@LoadBalanced
-	@HystrixCommand(fallbackMethod = "defaultProductService")
-	public String invokeService() {
-		RestTemplate restTemplate =  restTemplateBuilder.build();
-		
-		
-		
-		//Using Zuul-Gateway
-				InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
-				String baseUrl = instanceInfo.getHomePageUrl();
-				baseUrl = baseUrl+ "/api/serviceapp/product/all";
-				return restTemplate.getForObject(baseUrl, String.class);
-		
-	}
-	
-	
 		
 		
 	@RequestMapping("/welcome")
@@ -54,13 +35,11 @@ public class ProductViewController {
 	public String invokeService2() {
 		RestTemplate restTemplate =  restTemplateBuilder.build();
 		
-		
-		
 		//Using Zuul-Gateway
-				InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
-				String baseUrl = instanceInfo.getHomePageUrl();
-				baseUrl = baseUrl+ "/api/serviceapp/eCommerce/product/welcome";
-				return restTemplate.getForObject(baseUrl, String.class);
+		InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
+		String baseUrl = instanceInfo.getHomePageUrl();
+		baseUrl = baseUrl+ "/api/serviceapp/eCommerce/product/welcome";
+		return restTemplate.getForObject(baseUrl, String.class);
 		
 	}
 	
@@ -70,30 +49,72 @@ public class ProductViewController {
 	public String invokeService3() {
 		RestTemplate restTemplate =  restTemplateBuilder.build();
 		
-		
-		
 		//Using Zuul-Gateway
-				InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
-				String baseUrl = instanceInfo.getHomePageUrl();
-				baseUrl = baseUrl+ "/api/serviceapp/eCommerce/product/";
-				return restTemplate.getForObject(baseUrl, String.class);
+		InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
+		String baseUrl = instanceInfo.getHomePageUrl();
+		baseUrl = baseUrl+ "/api/serviceapp/eCommerce/product/";
+		return restTemplate.getForObject(baseUrl, String.class);
 		
 	}
 	
-	@RequestMapping("/getAllPrice")
+	
+	@RequestMapping("/getAllProducts")
+	@LoadBalanced
+	@HystrixCommand(fallbackMethod = "defaultProductService")
+	public String invokeService() {
+		RestTemplate restTemplate =  restTemplateBuilder.build();
+		
+		//Using Zuul-Gateway
+		InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
+		String baseUrl = instanceInfo.getHomePageUrl();
+		baseUrl = baseUrl+ "/api/serviceapp/eCommerce/product/getAllProducts";
+		return restTemplate.getForObject(baseUrl, String.class);
+		
+	}
+	
+	@RequestMapping("/getAllPrices")
+	@LoadBalanced
+	@HystrixCommand(fallbackMethod = "defaultPriceService")
 	public String invokeService4() {
 		RestTemplate restTemplate =  restTemplateBuilder.build();
 		
-		
-		
 		//Using Zuul-Gateway
-				InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
-				String baseUrl = instanceInfo.getHomePageUrl();
-				baseUrl = baseUrl+ "/api/serviceapp2/eCommerce/price/getAllPrices";
-				return restTemplate.getForObject(baseUrl, String.class); 
+		InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
+		String baseUrl = instanceInfo.getHomePageUrl();
+		baseUrl = baseUrl+ "/api/serviceapp2/eCommerce/price/getAllPrices";
+		return restTemplate.getForObject(baseUrl, String.class); 
 		
 	}
 	
+	
+	@RequestMapping("/getAllInventoryDetails")
+	@LoadBalanced
+	@HystrixCommand(fallbackMethod = "defaultInventoryService")
+	public String invokeService6() {
+		RestTemplate restTemplate =  restTemplateBuilder.build();
+		
+		//Using Zuul-Gateway
+		InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
+		String baseUrl = instanceInfo.getHomePageUrl();
+		baseUrl = baseUrl+ "/api/serviceapp4/eCommerce/inventory/getAllInventoryDetails";
+		return restTemplate.getForObject(baseUrl, String.class); 
+		
+	}
+	
+	
+	@RequestMapping("/getAllPromotions")
+	@LoadBalanced
+	@HystrixCommand(fallbackMethod = "defaultPromotionService")
+	public String invokeService7() {
+		RestTemplate restTemplate =  restTemplateBuilder.build();
+		
+		//Using Zuul-Gateway
+		InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
+		String baseUrl = instanceInfo.getHomePageUrl();
+		baseUrl = baseUrl+ "/api/serviceapp3/eCommerce/promotion/getAllPromotions";
+		return restTemplate.getForObject(baseUrl, String.class); 
+		
+	}
 	
 	@RequestMapping("/viewAllDetails")
 	public List<ProductView> invokeService5() {
@@ -210,12 +231,25 @@ public class ProductViewController {
 		return pv;
 	}	
 	private String defaultGreeting() {
-	 return "Error in Service !!!!! Please try later";
+		return "Error in Service !!!!! Please try later";
 	}
-	
 	private String defaultProductService() {
-		 return "Product Service is down!!!!! Please try later";
-		}
-
+		return "Product Service is down!!!!! Please try later";
+	}
+	private String defaultPriceService() {
+		return "Price Service is down!!!!! Please try later";
+	}
+	private String defaultInventoryService() {
+		return "Inventory Service is down!!!!! Please try later";
+	}
+	private String defaultPromotionService() {
+		return "Promotion Service is down !!!!! Please try later";
+	}	
+	/*private String defaultViewAllService() {
+		return "Issue in calling multiple services!!!!! Please try later";
+	}
+	private String defaultViewAllByIdService() {
+		return "Issue in calling multiple services!!!!! Please try later";
+	}*/
 
 }
