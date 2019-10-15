@@ -112,8 +112,7 @@ public class ProductViewController {
 		InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka("zuul-gateway", false);
 		String baseUrl = instanceInfo.getHomePageUrl();
 		baseUrl = baseUrl+ "/api/serviceapp3/eCommerce/promotion/getAllPromotions";
-		return restTemplate.getForObject(baseUrl, String.class); 
-		
+		return restTemplate.getForObject(baseUrl, String.class);
 	}
 	
 	@RequestMapping("/viewAllDetails")
